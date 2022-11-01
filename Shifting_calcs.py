@@ -25,7 +25,7 @@ gap= 0.15                   #initial gap between the belt's sides and the sheave
 
 data = pd.read_csv( 'ExportedRatioTimeValues.csv')
 placeholder= np.array(data).T
-table= placeholder[:, 0:100]
+table= placeholder[:, 0:400]
 
 
 #%%%
