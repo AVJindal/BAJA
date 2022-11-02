@@ -4,7 +4,14 @@ from lib2to3.pygram import Symbols
 from sympy import symbols, Eq, solve
 import numpy as np
 import pandas as pd
+'''
+Help: 
+- patterns in acceleration are weird (see table)
+- the force calculated here is F_net right? is F_net = F_belt? 
+- 
+'''
 
+#Constants
 CC = 8.5                     #Centre-Centre (in)
 #eta = 4.0                     #Initial Ratio
 
@@ -90,9 +97,8 @@ secondary_accel= derivative(table[0], secondary_vel)
 primary_clampF= primary_accel*p_move_mass
 secondary_clampF= secondary_accel*s_move_mass
 
-
-together= np.c_[table.T, primaryradii, secondaryradii, primary_disp, secondary_disp, primary_vel, secondary_vel, primary_accel, secondary_accel]
-headers= ['Time Step',"Ratio", "Primary Radius", "Secondary Radius", "Primary Displacement", "Secondary Displacement", "Primary Sheave Velocity", "Secondary Sheave Velocity", "Primary Sheave Acceleration", "Secondary Sheave Acceleration"]
+together= np.c_[table.T, primaryradii, secondaryradii, primary_disp, secondary_disp, primary_vel, secondary_vel, primary_accel, secondary_accel, primary_clampF, secondary_clampF]
+headers= ['Time Step',"Ratio", "Primary Radius", "Secondary Radius", "Primary Displacement", "Secondary Displacement", "Primary Sheave Velocity", "Secondary Sheave Velocity", "Primary Sheave Acceleration", "Secondary Sheave Acceleration", "Primary Clamping Force", "Secondary Force"]
 
 finaltable= pd.DataFrame(together, columns=headers)
 finaltable.to_csv('Final Data.csv', index=False)
