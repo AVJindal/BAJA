@@ -22,11 +22,18 @@ ramp_radius= 1.625  #inches (maybe)
 
 #General functions
 def springforce(k, disp):
-    return k*disp
+    return k*disp                   #disp will need to be displacement from initial position
 
 
 
 #Primary
+'''
+Force Balance: 
+F_Net = F-belt + F_spring - F_flyweights
+'''
+def flyweight_force(angle, mass=flyweight):                  #returns the force applied by the flyweights on the moving sheave
+    #STill need to code this, has to do with ramp angles, rpm, ratio??? we have the expression somewhere.  
+    return 
 
 
 #Secondary shit
