@@ -5,6 +5,8 @@ from sympy import symbols, Eq, solve
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from Forces import *
+
 '''
 Help: 
 - patterns in acceleration are weird (see table)
@@ -33,6 +35,7 @@ pitchOuterOffset = 0.185           #Distance from pitch radius to outer radius o
 
 p_move_mass= 0.7072                #mass of the primary moveable sheave (lb)
 s_move_mass= 0.993135              #mass of the secondary moveable sheave (lb)
+belt_mass= 0.875                   #mass of the belt (lb)
 
 gap= 0.15                          #initial gap between the belt's sides and the sheaves before engagement.
 
@@ -100,11 +103,16 @@ secondary_accel= derivative(table[0], secondary_vel)
 primary_clampF= primary_accel*p_move_mass
 secondary_clampF= secondary_accel*s_move_mass
 
-plt.plot(table[0], primary_disp)
-plt.show()
+belt_accel= derivative(table[0], derivative(table[0], primaryradii))
+belt_force= belt_accel*belt_mass
+
+# plt.plot(table[0], primary_disp)
+# plt.show()
 
 together= np.c_[table.T, primaryradii, secondaryradii, primary_disp, secondary_disp, primary_vel, secondary_vel, primary_accel, secondary_accel, primary_clampF, secondary_clampF]
-headers= ['Time Step',"Ratio", "Primary Radius", "Secondary Radius", "Primary Displacement", "Secondary Displacement", "Primary Sheave Velocity", "Secondary Sheave Velocity", "Primary Sheave Acceleration", "Secondary Sheave Acceleration", "Primary Clamping Force", "Secondary Force"]
+# headers= ['Time Step',"Ratio", "Primary Radius", "Secondary Radius", "Primary Displacement", "Secondary Displacement", "Primary Sheave Velocity", "Secondary Sheave Velocity", "Primary Sheave Acceleration", "Secondary Sheave Acceleration", "Primary Clamping Force", "Secondary Force"]
 
-finaltable= pd.DataFrame(together, columns=headers)
-finaltable.to_csv('Final Data.csv', index=False)
+# finaltable= pd.DataFrame(together, columns=headers)
+# finaltable.to_csv('Final Data.csv', index=False)
+
+
