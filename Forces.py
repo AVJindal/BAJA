@@ -15,6 +15,7 @@ torque= 14.5        #lbf-ft
 ramp_angle = 8           #ramp angle 
 flyweight= 420      #grams!
 k1= 50              #primary linear spring rate (lb-in)
+r_1= 2.5663           #dummy variable for the distance of hte ramps from the shaft centre
 
 #secondary data
 k2= 21              #secondary linear spring rate (lb-in)
@@ -31,12 +32,9 @@ def springforce(k, disp):
 Force Balance: 
 F_Net = F-belt + F_spring - F_flyweights
 '''
-def flyweight_force(x, theta, mass=flyweight):                  #returns the force applied by the flyweights on the moving sheave
-    r= r_1 + x*np.cos(theta*np.pi/180)                          #where x is displacement of the shaft
-    
-    #Still need to code this, has to do with ramp angles, rpm, ratio??? we have the expression somewhere.
-      
-    return 
+def flyweight_force(x, omega=3200, theta=ramp_angle, mass=flyweight):                  #returns the force applied by the flyweights on the moving sheave
+    r= r_1 + x*np.cos(theta*np.pi/180)                                            #where x is displacement of the shaft      
+    return mass*(omega**2)*r*tan((90-theta)*np.pi/180)
 
 
 #Secondary 
@@ -50,6 +48,6 @@ def sideforce(ratio, alpha):
     return 6*torque*ratio/(ramp_radius*tan(alpha))
 
 def torsion():
-    return 
+    return k2_ang*
 
  

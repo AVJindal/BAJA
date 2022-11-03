@@ -29,8 +29,8 @@ beltEffLength = 33.8583            #Length of belt at pitch (in)
 pitchInnerOffset = 0.4             #Distance from pitch radius to inner radius of belt
 pitchOuterOffset = 0.185           #Distance from pitch radius to outer radius of belt
 
-p_move_mass= 0.7072                #mass of the primary moveable sheave (lm)
-s_move_mass= 0.993135              #mass of the secondary moveable sheave (lm)
+p_move_mass= 0.7072                #mass of the primary moveable sheave (lb)
+s_move_mass= 0.993135              #mass of the secondary moveable sheave (lb)
 
 gap= 0.15                          #initial gap between the belt's sides and the sheaves before engagement.
 
