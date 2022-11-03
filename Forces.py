@@ -12,6 +12,7 @@ from Shifting_calcs import *
 torque= 14.5        #lbf-ft
 
 #primary data
+ramp_angle = 8           #ramp angle 
 flyweight= 420      #grams!
 k1= 50              #primary linear spring rate (lb-in)
 
@@ -25,18 +26,20 @@ def springforce(k, disp):
     return k*disp                   #disp will need to be displacement from initial position
 
 
-
 #Primary
 '''
 Force Balance: 
 F_Net = F-belt + F_spring - F_flyweights
 '''
-def flyweight_force(angle, mass=flyweight):                  #returns the force applied by the flyweights on the moving sheave
-    #STill need to code this, has to do with ramp angles, rpm, ratio??? we have the expression somewhere.  
+def flyweight_force(x, theta, mass=flyweight):                  #returns the force applied by the flyweights on the moving sheave
+    r= r_1 + x*np.cos(theta*np.pi/180)                          #where x is displacement of the shaft
+    
+    #Still need to code this, has to do with ramp angles, rpm, ratio??? we have the expression somewhere.
+      
     return 
 
 
-#Secondary shit
+#Secondary 
 '''
 Force balance:
 F_Net= F_belt - F_spring_angular -F_spring_linear - F_cam
@@ -45,4 +48,8 @@ Note that displacement is also resisted linearly by the angular spring
 '''
 def sideforce(ratio, alpha):
     return 6*torque*ratio/(ramp_radius*tan(alpha))
+
+def torsion():
+    return 
+
  

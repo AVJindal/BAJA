@@ -4,6 +4,7 @@ from lib2to3.pygram import Symbols
 from sympy import symbols, Eq, solve
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 '''
 Help: 
 - patterns in acceleration are weird (see table)
@@ -35,7 +36,7 @@ gap= 0.15                          #initial gap between the belt's sides and the
 
 data = pd.read_csv( 'ExportedRatioTimeValues.csv')
 placeholder= np.array(data).T
-table= placeholder[:, 15:100]
+table= placeholder[:, 10:1000:5]
 
 #%%%
 def radii(ratio):                       #Function that takes the ratio and returns the radii of belt on each sheave
@@ -66,12 +67,12 @@ low_Ssheave= R2_low
 high_Sinner = R2_high
 
 def prim_displacement(radius):                          #gives primary displacement given change in radius from initial
-    rad_change= radius -pitchInnerOffset - low_pshaft
-    return tan(beta1*np.pi/180)*rad_change + gap 
+    rad_change= radius - R1_low 
+    return tan(beta1*np.pi/180)*rad_change + gap
 
 def sec_displacement(radius):                           #gives secondary displacement given change in radius from initial
-    rad_change= radius -pitchInnerOffset - high_Sinner
-    return tan(beta2*np.pi/180)*rad_change + gap 
+    rad_change = radius - R2_low
+    return tan(beta2*np.pi/180)*rad_change + gap
 
 def derivative(time, f):                                #secant derivative function
     prime= [(f[1]-f[0])/(time[1]-time[0])]
@@ -96,6 +97,9 @@ primary_accel= derivative(table[0], primary_vel)
 secondary_accel= derivative(table[0], secondary_vel)
 primary_clampF= primary_accel*p_move_mass
 secondary_clampF= secondary_accel*s_move_mass
+
+plt.plot(table[0], primary_disp)
+plt.show()
 
 together= np.c_[table.T, primaryradii, secondaryradii, primary_disp, secondary_disp, primary_vel, secondary_vel, primary_accel, secondary_accel, primary_clampF, secondary_clampF]
 headers= ['Time Step',"Ratio", "Primary Radius", "Secondary Radius", "Primary Displacement", "Secondary Displacement", "Primary Sheave Velocity", "Secondary Sheave Velocity", "Primary Sheave Acceleration", "Secondary Sheave Acceleration", "Primary Clamping Force", "Secondary Force"]
