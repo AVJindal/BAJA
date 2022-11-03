@@ -13,14 +13,15 @@ torque= 14.5        #lbf-ft
 
 #primary data
 ramp_angle = 8           #ramp angle 
-flyweight= 420      #grams!
-k1= 50              #primary linear spring rate (lb-in)
-r_1= 2.5663           #dummy variable for the distance of hte ramps from the shaft centre
+flyweight= 420           #grams!
+k1= 50                   #primary linear spring rate (lb-in)
+r_1= 2.5663              #dummy variable for the distance of hte ramps from the shaft centre
 
 #secondary data
-k2= 21              #secondary linear spring rate (lb-in)
-k2_ang= 46          #secondart angular spring rate (lb-in/rad)
-ramp_radius= 1.625  #inches (maybe)
+k2= 21                   #secondary linear spring rate (lb-in)
+k2_ang= 46               #secondart angular spring rate (lb-in/rad)
+helix_radius= 1.625       #inches
+helix_angle = 22.5547      #degrees       
 
 #General functions
 def springforce(k, disp):
@@ -45,9 +46,10 @@ F_Net= F_belt - F_spring_angular -F_spring_linear - F_cam
 Note that displacement is also resisted linearly by the angular spring
 '''
 def sideforce(ratio, alpha):
-    return 6*torque*ratio/(ramp_radius*tan(alpha))
+    return 6*torque*ratio/(helix_radius*tan(alpha))
 
-def torsion():
-    return k2_ang* 
+def torsion(disp, alpha=helix_angle, r=helix_radius):
+    l= disp/tan(alpha*np.pi/180)
+    return k2_ang * l * 180 /(np.pi*r**2)
 
- 
+
