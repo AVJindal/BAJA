@@ -48,6 +48,6 @@ def sideforce(ratio, alpha):
     return 6*torque*ratio/(ramp_radius*tan(alpha))
 
 def torsion():
-    return k2_ang*
+    return k2_ang* 
 
  

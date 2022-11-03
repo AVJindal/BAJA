@@ -12,6 +12,8 @@ Help:
 - 
 '''
 
+output_accelerations = []
+
 #Constants
 CC = 8.5                     #Centre-Centre (in)
 #eta = 4.0                     #Initial Ratio
