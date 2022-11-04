@@ -94,13 +94,21 @@ sec_max_disp = (R2_high - pitchInnerOffset - high_Sinner)*tan(beta2*np.pi/180) +
 ## MAKE TABLE
 primaryradii= np.array([prim_rad(rat) for rat in table[1]])
 secondaryradii= primaryradii*table[1]
-primary_disp= prim_displacement(primaryradii)
-secondary_disp = sec_displacement(secondaryradii)
+primary_disp= prim_displacement(primaryradii)/12
+secondary_disp = sec_displacement(secondaryradii)/12
 primary_vel= derivative(table[0], primary_disp)
 secondary_vel = derivative(table[0], secondary_disp)
 primary_accel= derivative(table[0], primary_vel)
 secondary_accel= derivative(table[0], secondary_vel)
 primary_clampF= primary_accel*p_move_mass
+fig, ax = plt.subplots()
+ax.plot(table[0], primary_accel)
+ax.plot(table[0], primary_vel)
+ax.plot(table[0], primary_disp)
+
+plt.show()
+
+plt.legend()
 secondary_clampF= secondary_accel*s_move_mass
 
 belt_accel= derivative(table[0], derivative(table[0], primaryradii))

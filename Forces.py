@@ -4,6 +4,7 @@ from sympy import symbols, Eq, solve
 import numpy as np
 import pandas as pd
 from Shifting_calcs import *
+import Shifting_calcs
 ''' 
 - datum is usually the fixed sheave
 - outwards displacement is taken as positive (thus secondary velocities and accelerations are negative)
@@ -12,10 +13,43 @@ from Shifting_calcs import *
 torque= 14.5             #lbf-ft
 
 #primary data
-ramp_angle = 8           #ramp angle 
 flyweight= 420           #grams!
 k1= 50                   #primary linear spring rate (lb-in)
 r_1= 2.5663              #dummy variable for the distance of hte ramps from the shaft centre
+
+# primary ramp initiation
+prim_max_disp = 0.684791525761340
+theta_1 = 62
+theta_2 = 72
+flatLen = 0.23
+rampLen = prim_max_disp + 0.5
+
+
+y_ramp = []
+x_ramp = []
+
+n = 100
+theta_0 = 62
+theta = [theta_0]
+incLen = rampLen/n
+flatX = 0.2565
+flatY = 0.103
+centerRampOffsetY = 2.42 #(in)
+x_n = 0
+y_n = centerRampOffsetY
+for c in range(n):
+    x_n = x_n + incLen*np.sin(theta_0*np.pi/180)
+    x_ramp.append(x_n)
+    y_n = y_n + incLen*np.cos(theta_0*np.pi/180)
+    y_ramp.append(y_n)
+    theta_0 = theta_0 + (theta_2 - theta_1)/n
+    theta.append(theta_0)
+    # print(theta_0)
+
+plt.plot(y_ramp, x_ramp)
+plt.show()
+
+
 
 #secondary data
 k2= 21                   #secondary linear spring rate (lb-in)
@@ -33,44 +67,32 @@ def springforce(k, disp):
 Force Balance: 
 F_Net = F_belt + F_spring - F_flyweights
 '''
-def flyweight_force(disp, omega=3200, theta=ramp_angle, mass=flyweight):                  #returns the force applied by the flyweights on the moving sheave
-    r= r_1 + disp*np.cos(theta*np.pi/180)                                                  
-    return mass*(omega**2)*r*tan((90-theta)*np.pi/180)
-primary_disp = 0
-def prim_balance(k=k1, d=primary_disp):
-    F_s = springforce(k, d)
-    F_FW = flyweight_force(d)
-    return (belt_force+ F_s + F_FW)/p_move_mass
-
-prim_max_disp = 0.684791525761340
-theta_1 = 62
-theta_2 = 72
-flatLen = 0.23
-rampLen = prim_max_disp + 0.5
-
-x_n = 0
-y_n = 0
-y_ramp = []
-x_ramp = []
-n = 100
-theta_0 = 62
-incLen = rampLen/n
-
-for c in range(n):
-    x_n = x_n + incLen*np.sin(theta_0*np.pi/180)
-    x_ramp.append(x_n)
-    y_n = y_n + incLen*np.cos(theta_0*np.pi/180)
-    y_ramp.append(y_n)
-    theta_0 = theta_0 - (theta_2 - theta_1)/n
+def flyweight_force(disp, omega=3200, mass=flyweight):                  #returns the force applied by the flyweights on the moving sheave
+    r= primary_ramp_pos(disp)[0]/12                                     # primary_ramp_pos returns (x, y, theta) converts in to ft 
+    omega = omega*((2*np.pi)/60)
+    return ((mass/1000)*2.2*32.2)*(omega**2)*(r**3)*tan((90-theta)*np.pi/180)
     
-    # print(theta_0)
+def prim_balance(t):
+    i = timeIndex(t)
+    d = Shifting_calcs.primary_disp[i]
+    belt_force_inst = belt_force[i]
+    F_s = springforce(k1, d)
+    F_FW = flyweight_force(d)
+    return (-belt_force_inst - F_s + F_FW)/p_move_mass
 
-print(x_n)
-print(y_n)
-plt.plot(y_ramp, x_ramp)
-plt.show()
-# def primary_ramp_pos(mass, sheave_disp):
+def timeIndex(t):
+    for i in range(len(Shifting_calcs.table[0])):
+        if t == Shifting_calcs.table[0][i]:
+            return i
 
+def primary_ramp_pos(sheave_disp):
+    for i in range(len(x_ramp)):
+        if sheave_disp < x_ramp[i]:
+            i = i-1
+            break
+            
+        
+    return (x_ramp[i], y_ramp[i], theta[i])
 
 #Secondary 
 '''
